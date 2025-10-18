@@ -1,0 +1,25 @@
+# Cloudflare Pages Configuration
+# This file is used by Wrangler (Cloudflare's CLI tool)
+
+name = "honey-crunch"
+compatibility_date = "2025-01-01"
+
+# Pages configuration
+pages_build_output_dir = "."
+
+# KV Namespace Bindings
+# You'll need to create a KV namespace in Cloudflare Dashboard and add its ID here
+# After creating the KV namespace, update this section with the actual namespace ID
+
+# For production environment
+# [[kv_namespaces]]
+# binding = "ANALYTICS"
+# id = "YOUR_KV_NAMESPACE_ID_HERE"
+
+# For preview/development environment (optional)
+# [[env.preview.kv_namespaces]]
+# binding = "ANALYTICS"
+# id = "YOUR_PREVIEW_KV_NAMESPACE_ID_HERE"
+
+# Note: The binding name "ANALYTICS" is used in the Functions code
+# Make sure it matches across all files

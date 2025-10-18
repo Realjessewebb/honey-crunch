@@ -1,0 +1,25 @@
+# Wrangler
+.wrangler/
+wrangler.toml.backup
+
+# Node modules (if you add npm packages later)
+node_modules/
+
+# Environment variables
+.env
+.dev.vars
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Honey Crunch</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card h2 {
+            margin-top: 0;
+            font-size: 1.2rem;
+            color: var(--text-color);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+        }
+
+        .refresh-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+
+        .refresh-btn:hover {
+            opacity: 0.9;
+        }
+
+        .loading {
+            color: var(--secondary-text);
+            font-style: italic;
+        }
+
+        .error {
+            color: #e74c3c;
+            padding: 15px;
+            background: #fadbd8;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .last-updated {
+            color: var(--secondary-text);
+            font-size: 0.85rem;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Analytics Dashboard</h1>
+        <p>Real-time click tracking for Honey Crunch</p>
+
+        <div id="error-message" class="error" style="display: none;"></div>
+
+        <div class="stat-card">
+            <h2>Total Page Visits</h2>
+            <div class="stat-value" id="visit-count">
+                <span class="loading">Loading...</span>
+            </div>
+            <div class="stat-label">Unique page loads tracked</div>
+        </div>
+
+        <div class="stat-card">
+            <h2>Order Now Button Clicks</h2>
+            <div class="stat-value" id="click-count">
+                <span class="loading">Loading...</span>
+            </div>
+            <div class="stat-label">Total clicks on the "Order Now" button</div>
+        </div>
+
+        <button class="refresh-btn" onclick="loadStats()">Refresh Stats</button>
+
+        <div class="last-updated">
+            Last updated: <span id="last-updated-time">Never</span>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center;">
+            <a href="/" style="color: var(--primary-color);">← Back to Homepage</a>
+        </div>
+    </div>
+
+    <script>
+        async function loadStats() {
+            const visitCountEl = document.getElementById('visit-count');
+            const clickCountEl = document.getElementById('click-count');
+            const lastUpdatedEl = document.getElementById('last-updated-time');
+            const errorEl = document.getElementById('error-message');
+
+            try {
+                errorEl.style.display = 'none';
+                visitCountEl.innerHTML = '<span class="loading">Loading...</span>';
+                clickCountEl.innerHTML = '<span class="loading">Loading...</span>';
+
+                const response = await fetch('/get-stats');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                visitCountEl.textContent = data.visits || 0;
+                clickCountEl.textContent = data.clicks || 0;
+                lastUpdatedEl.textContent = new Date().toLocaleString();
+
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+                errorEl.textContent = 'Failed to load statistics. Make sure Cloudflare Workers KV is properly configured.';
+                errorEl.style.display = 'block';
+                visitCountEl.innerHTML = '<span style="color: #e74c3c;">Error</span>';
+                clickCountEl.innerHTML = '<span style="color: #e74c3c;">Error</span>';
+            }
+        }
+
+        // Load stats on page load
+        window.addEventListener('load', loadStats);
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadStats, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honey Crunch</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-placeholder">
+                <!-- Logo will go here -->
+                <h1>Honey Crunch</h1>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <h2>Welcome to Honey Crunch</h2>
+                    <p>Your favorite honey-flavored snack!</p>
+
+                    <div class="cta-section">
+                        <a href="https://example.com" id="orderNowBtn" class="btn-primary">Order Now</a>
+                        <p class="cta-subtext">Change the link in index.html</p>
+                    </div>
+                </div>
+
+                <div class="image-placeholder">
+                    <!-- Product image will go here -->
+                    <p>Product Image</p>
+                </div>
+            </section>
+
+            <section class="features">
+                <div class="feature">
+                    <h3>Feature 1</h3>
+                    <p>Description goes here</p>
+                </div>
+                <div class="feature">
+                    <h3>Feature 2</h3>
+                    <p>Description goes here</p>
+                </div>
+                <div class="feature">
+                    <h3>Feature 3</h3>
+                    <p>Description goes here</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Honey Crunch. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Track page visit on load
+        window.addEventListener('load', async () => {
+            try {
+                await fetch('/track-visit', { method: 'POST' });
+            } catch (error) {
+                console.error('Failed to track visit:', error);
+            }
+        });
+
+        // Track "Order Now" button clicks
+        document.getElementById('orderNowBtn').addEventListener('click', async (e) => {
+            try {
+                await fetch('/track-click', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ button: 'order-now' })
+                });
+            } catch (error) {
+                console.error('Failed to track click:', error);
+            }
+            // Link navigation will proceed normally
+        });
+    </script>
+</body>
+</html>
